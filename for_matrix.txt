@@ -1,0 +1,33 @@
+unsigned int g_rand = 0;
+unsigned int rand() {
+	unsigned int a = 1103515245, c = 12345, m = 2147483648;
+	g_rand = (a * g_rand + c) % m;
+	return (g_rand » 2);
+}
+extern "C" int kmain()
+{
+	const char* hello = "Welcome to DictOS (gcc edition)!";
+	out_str(0x1F, hello, num_line++);
+	intr_disable();
+	intr_init();
+	intr_start();
+	intr_enable();
+	char *vb = (char*)VIDEO_BUF_PTR;
+	while (1)
+	{
+		int pos = rand() % (80 * 25);
+		vb[pos * 2] = (char)rand();
+		// vb[pos*2 + 1] = 0x0A;
+		vb[pos * 2 + 1] = rand() % 16;
+
+		int i;
+		for (i = 0; i < 1000; i++)
+			asm("nop");
+	}
+	// Бесконечный цикл
+	while (1)
+	{
+		asm("hlt");
+	}
+	return 0;
+}
